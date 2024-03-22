@@ -24,18 +24,18 @@ d3.json(url).then(function(data) {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     })
 
-    const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    const water = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
+        attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
     });
 
     const baseMaps = {
-        "Street Map": street,
-        "Topographic Map": topo
+        "Watercolor Map": water,
+        "Street Map": street
       };
 
     const overlayMaps  = {
-        "State Population": state,
-        "City Population": city
+        "City Population": city,
+        "State Population": state
     }
 
     // -------------
@@ -43,8 +43,8 @@ d3.json(url).then(function(data) {
     // -------------
     let myMap = L.map("map", {
         center: [lat, long], 
-        zoom: 10,
-        layers: [street]
+        zoom: 3,
+        layers: [water]
     })
 
     // -------------
@@ -62,9 +62,9 @@ d3.json(url).then(function(data) {
           radius: popularity * 500
       }).bindPopup(`<h1>${city}</h1> <hr> <h3>Popularity: ${popularity}</h3>`).addTo(myMap);
   
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(myMap);
+      L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    });
 
     L.control.layers(baseMaps).addTo(myMap);
 });
