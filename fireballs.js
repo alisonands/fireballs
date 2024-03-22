@@ -62,7 +62,7 @@ fetch('./data.json')
       else {
         color = "#008000";
       }
-      // console.log([lat[i], lng[i]])
+
       L.circle([lat[i], lng[i]], {
         fillOpacity: 0.75,
         radius: (Math.log(energy[i])/Math.log(10)) * 100000,
