@@ -3,7 +3,7 @@ import requests
 # import json
 import pandas as pd
 
-# %%
+# %% ---GATHERING DATA FROM API---
 url = 'https://ssd-api.jpl.nasa.gov/fireball.api'
 # params = {'date-min': '2000-01-01', 
 #           'date-max': '2024-01-01'}
@@ -16,7 +16,7 @@ data_df_coords = data_df.copy()
 data_df_coords['lat'] = ''
 data_df_coords['lon'] = ''
 
-# %%
+# %% ---CLEANING DATA---
 for i in range(len(data_df_coords)):
     if data_df_coords['lat-dir'][i] == 'S':
         data_df_coords['lat'][i] = data_df['lat'][i] * -1
@@ -26,18 +26,14 @@ for i in range(len(data_df_coords)):
         data_df_coords['lon'][i] = data_df['lon'][i] * -1
     else:
         data_df_coords['lon'][i] = data_df['lon'][i]
-data_df_coords.head()
 
-# %%
-data_df_coords.sample(5)
-
-# %%
+# %% ---CHANGING DTYPES AND EXPORTING---
 # data_df_coords = data_df_coords[['lat', 'lon']]
 data_df_coords['lat'] = pd.to_numeric(data_df_coords['lat'])
 data_df_coords['lon'] = pd.to_numeric(data_df_coords['lon'])
 data_df_coords['energy'] = pd.to_numeric(data_df_coords['energy'])
 data_df_coords.rename(columns = {'lon': 'lng'}, inplace=True)
 data_df_coords.dropna(inplace=True)
-data_df_coords.to_json('data.json')
+data_df_coords.to_json('data/data.json')
 
 
