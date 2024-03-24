@@ -32,10 +32,10 @@ fetch('./data/data.json')
       "Toner": toner
     };
 
-    const overlayMaps  = {
-      "Asteroids": city,
-      "Earthquakes": state
-  }
+  //   const overlayMaps  = {
+  //     "Asteroids": city,
+  //     "Earthquakes": state
+  // }
 
 
     let lat = Object.values(data['lat'])
