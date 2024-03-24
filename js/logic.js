@@ -1,20 +1,19 @@
 // import data from './data.json' assert { type: 'json' };
 // console.log(data);
-data_ = []
-fetch('./data.json')
+
+url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
+
+fetch('./data/data.json')
   .then(res => res.json())
   .then(data => {
-    data_.push(data)
 
-
-
-    // Add a tile layer.
+    // Add tile layers.
     const standard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
     const water = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
-        attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+      attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
     });
 
     const toner = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png', {
@@ -33,13 +32,16 @@ fetch('./data.json')
       "Toner": toner
     };
 
+    const overlayMaps  = {
+      "Asteroids": city,
+      "Earthquakes": state
+  }
+
 
     let lat = Object.values(data['lat'])
     let lng = Object.values(data['lng'])
     let energy = Object.values(data['energy'])
     let date = Object.values(data['date'])
-    
-    colors = ['#008000', '#7fff00', '#ffff00', '#ffa500', '#ff6347', '#ff0000']
 
     for (let i = 0; i < lat.length; i++) {
 
@@ -65,7 +67,7 @@ fetch('./data.json')
 
       L.circle([lat[i], lng[i]], {
         fillOpacity: 0.75,
-        radius: (Math.log(energy[i])/Math.log(10)) * 100000,
+        radius: (Math.log(energy[i]) / Math.log(10)) * 100000,
         fillColor: color,
         color: "white",
         weight: 1
@@ -73,5 +75,22 @@ fetch('./data.json')
     }
 
     L.control.layers(baseMaps).addTo(myMap);
-  })
 
+    let legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = function() {
+      let div = L.DomUtil.create("div", "info legend");
+      let colors = ['#ff0000', '#ff6347', '#ffa500', '#ffff00', '#7fff00','#008000']
+      let magnitude = ['>200', '80-200', '40-80', '20-40', '10-20', '<10'];
+      let legendInfo = "<h2> Meteorite energy (kt) </h2>"
+      div.innerHTML = legendInfo;
+
+      for (var i = 0; i < colors.length; i++) {
+        div.innerHTML += '<i style = "background-color:' + colors[i] + '"></i> ' + magnitude[i] + '<br>';
+      }
+
+      return div;
+    };
+
+    legend.addTo(myMap);
+  })
