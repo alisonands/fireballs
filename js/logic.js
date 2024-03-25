@@ -27,9 +27,9 @@ fetch('./data/data.json')
     });
 
     const baseMaps = {
+      "Toner": toner,
       "Standard Map": standard,
-      "Watercolor Map": water,
-      "Toner": toner
+      "Watercolor Map": water
     };
 
   //   const overlayMaps  = {
@@ -65,9 +65,11 @@ fetch('./data/data.json')
         color = "#008000";
       }
 
+      rad = Math.log(energy[i]) / Math.log(10)
+
       L.circle([lat[i], lng[i]], {
         fillOpacity: 0.75,
-        radius: (Math.log(energy[i]) / Math.log(10)) * 100000,
+        radius: (rad) * 100000,
         fillColor: color,
         color: "white",
         weight: 1
